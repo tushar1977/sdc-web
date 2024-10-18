@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emoji List</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      table {
+        margin: 20px auto; /* Center the table and add space above and below */
+        border-collapse: collapse;
+        width: 80%;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      input {
+        margin: 20px; /* Space around the input field */
+        padding: 10px;
+        width: 300px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+      h1 {
+        margin-bottom: 20px; /* Space between the heading and the input */
+      }
+      .table-container {
+        margin-top: 30px; /* Adjust this value for more or less space */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Emoji List</h1>
+    <input
+      type="text"
+      id="myInput"
+      onkeyup="myFunction()"
+      placeholder="Search for Emojis.."
+    />
+
+    <div class="table-container">
+      <table id="emojiTable">
+        <tr>
+          <th>Name</th>
+
+          <th>Symbol</th>
+        </tr>
+
+        {% for emoji in emojis %}
+        <tr>
+          <th>{{emoji.slug}}</th>
+
+          <th>{{emoji.character}}</th>
+          <th id="emojis-th">
+            <button
+              style="padding: 3px"
+              class="copy-btn"
+              data-emoji="{{ emoji.character }}"
+            >
+              Copy Emoji
+            </button>
+          </th>
+        </tr>
+
+        {% endfor %}
+      </table>
+    </div>
+    <script>
+      const copyButtons = document.querySelectorAll(".copy-btn");
+
+      copyButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const emoji = button.getAttribute("data-emoji");
+          navigator.clipboard
+            .writeText(emoji)
+            .then(() => {
+              alert("Emoji copied to clipboard!");
+            })
+            .catch((err) => {
+              console.error("Failed to copy emoji:", err);
+            });
+        });
+      });
+      function myFunction() {
+        var input, filter, table, tr, td, i, j, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toLowerCase();
+        table = document.getElementById("emojiTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 1; i < tr.length; i++) {
+          tr[i].style.display = "none";
+          for (j = 0; j < tr[i].cells.length; j++) {
+            td = tr[i].cells[j];
+            if (td) {
+              txtValue = td.textContent || td.innerText;
+              if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+                break;
+              }
+            }
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
